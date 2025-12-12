@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "hello-world.fullname" . }}-app-config
+  labels:
+    {{- include "hello-world.labels" . | nindent 4 }}
+data:
+  api-endpoint: {{ .Values.appConfig.apiEndpoint | quote }}
+  api-timeout: {{ .Values.appConfig.apiTimeout | quote }}
+  feature-flags: |
+    {{- toYaml .Values.appConfig.featureFlags | nindent 4 }}
+
