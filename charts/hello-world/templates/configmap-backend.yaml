@@ -1,3 +1,4 @@
+{{- if and .Values.backend .Values.backend.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,7 +7,13 @@ metadata:
     {{- include "hello-world.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 data:
+  {{- if .Values.backend.config.databaseUrl }}
   database-url: {{ .Values.backend.config.databaseUrl | quote }}
+  {{- end }}
+  {{- if .Values.backend.config.databasePoolSize }}
   database-pool-size: {{ .Values.backend.config.databasePoolSize | quote }}
+  {{- end }}
+  {{- if .Values.backend.config.cacheTtl }}
   cache-ttl: {{ .Values.backend.config.cacheTtl | quote }}
-
+  {{- end }}
+{{- end }}

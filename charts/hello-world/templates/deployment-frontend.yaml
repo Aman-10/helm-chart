@@ -1,3 +1,4 @@
+{{- if .Values.frontend }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +7,7 @@ metadata:
     {{- include "hello-world.labels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
 spec:
-  replicas: {{ .Values.frontend.replicaCount }}
+  replicas: {{ .Values.frontend.replicaCount | default 1 }}
   selector:
     matchLabels:
       {{- include "hello-world.selectorLabels" . | nindent 6 }}
@@ -20,29 +21,23 @@ spec:
       containers:
         - name: frontend
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag | default "latest" }}"
-          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - name: http
-              containerPort: {{ .Values.frontend.containerPort }}
+              containerPort: {{ .Values.frontend.containerPort | default 80 }}
               protocol: TCP
-          env:
-            {{- range $key, $value := .Values.frontend.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-            {{- end }}
-            - name: CONFIG_MAP_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "hello-world.fullname" . }}-frontend-config
-                  key: app-config
           livenessProbe:
             httpGet:
-              path: {{ .Values.frontend.livenessProbe.path }}
+              path: /
               port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.frontend.readinessProbe.path }}
+              path: /
               port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
           resources:
-            {{- toYaml .Values.frontend.resources | nindent 12 }}
-
+            {{- toYaml (.Values.frontend.resources | default dict) | nindent 12 }}
+{{- end }}

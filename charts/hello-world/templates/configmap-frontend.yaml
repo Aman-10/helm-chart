@@ -1,3 +1,4 @@
+{{- if and .Values.frontend .Values.frontend.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,8 +7,14 @@ metadata:
     {{- include "hello-world.labels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
 data:
+  {{- if .Values.frontend.config.appConfig }}
   app-config: |
     {{- .Values.frontend.config.appConfig | nindent 4 }}
+  {{- end }}
+  {{- if .Values.frontend.config.environment }}
   environment: {{ .Values.frontend.config.environment | quote }}
+  {{- end }}
+  {{- if .Values.frontend.config.logLevel }}
   log-level: {{ .Values.frontend.config.logLevel | quote }}
-
+  {{- end }}
+{{- end }}

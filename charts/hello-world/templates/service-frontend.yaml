@@ -1,3 +1,4 @@
+{{- if .Values.frontend }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,13 +7,15 @@ metadata:
     {{- include "hello-world.labels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
 spec:
-  type: {{ .Values.frontend.service.type }}
+  type: {{ .Values.frontend.service.type | default "ClusterIP" }}
   ports:
-    - port: {{ .Values.frontend.service.port }}
+    - port: {{ .Values.frontend.service.port | default 80 }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
     {{- include "hello-world.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
+{{- end }}
+
 

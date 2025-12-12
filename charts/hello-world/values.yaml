@@ -28,10 +28,10 @@ service:
 
 resources:
   limits:
-    cpu: 50m
+    cpu: 500m
     memory: 512Mi
   requests:
-    cpu: 25m
+    cpu: 250m
     memory: 256Mi
 
 # Frontend deployment configuration
@@ -42,31 +42,16 @@ frontend:
     tag: "1.21"
     pullPolicy: IfNotPresent
   containerPort: 80
-  env:
-    NODE_ENV: production
-    APP_NAME: frontend
   service:
     type: ClusterIP
     port: 80
-  livenessProbe:
-    path: /
-  readinessProbe:
-    path: /
   resources:
     limits:
-      cpu: 100m
+      cpu: 1000m
       memory: 1Gi
     requests:
-      cpu: 50m
+      cpu: 500m
       memory: 512Mi
-  config:
-    appConfig: |
-      {
-        "theme": "light",
-        "apiUrl": "http://backend-service:8080"
-      }
-    environment: production
-    logLevel: info
 
 # Backend deployment configuration
 backend:
@@ -75,17 +60,10 @@ backend:
     repository: nginx
     tag: "1.21"
     pullPolicy: IfNotPresent
-  containerPort: 8080
-  env:
-    NODE_ENV: production
-    APP_NAME: backend
+  containerPort: 80
   service:
     type: ClusterIP
-    port: 8080
-  livenessProbe:
-    path: /health
-  readinessProbe:
-    path: /ready
+    port: 80
   resources:
     limits:
       cpu: 2000m
@@ -93,10 +71,6 @@ backend:
     requests:
       cpu: 1000m
       memory: 1Gi
-  config:
-    databaseUrl: postgresql://localhost:5432/mydb
-    databasePoolSize: "10"
-    cacheTtl: "3600"
 
 # Application-wide configuration
 appConfig:
@@ -106,3 +80,4 @@ appConfig:
     enableNewFeature: true
     enableBetaFeatures: false
     maintenanceMode: false
+

@@ -1,3 +1,4 @@
+{{- if .Values.backend }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -5,14 +6,17 @@ metadata:
   labels:
     {{- include "hello-world.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
+    testing-app: test
 spec:
-  type: {{ .Values.backend.service.type }}
+  type: {{ .Values.backend.service.type | default "ClusterIP" }}
   ports:
-    - port: {{ .Values.backend.service.port }}
+    - port: {{ .Values.backend.service.port | default 80 }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
     {{- include "hello-world.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: backend
+{{- end }}
+
 

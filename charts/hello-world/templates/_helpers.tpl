@@ -35,6 +35,7 @@ Common labels
 */}}
 {{- define "hello-world.labels" -}}
 helm.sh/chart: {{ include "hello-world.chart" . }}
+testing: app-test
 {{ include "hello-world.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

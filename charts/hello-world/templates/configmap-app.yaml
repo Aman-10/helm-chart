@@ -10,3 +10,4 @@ data:
   feature-flags: |
     {{- toYaml .Values.appConfig.featureFlags | nindent 4 }}
 
+
