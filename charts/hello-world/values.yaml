@@ -39,7 +39,7 @@ frontend:
   replicaCount: 1
   image:
     repository: nginx
-    tag: "1.21"
+    tag: "1.13.1"
     pullPolicy: IfNotPresent
   containerPort: 80
   service:
