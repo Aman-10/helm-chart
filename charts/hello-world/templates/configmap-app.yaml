@@ -4,6 +4,7 @@ metadata:
   name: {{ include "hello-world.fullname" . }}-app-config
   labels:
     {{- include "hello-world.labels" . | nindent 4 }}
+    testing: app
 data:
   api-endpoint: {{ .Values.appConfig.apiEndpoint | quote }}
   api-timeout: {{ .Values.appConfig.apiTimeout | quote }}
