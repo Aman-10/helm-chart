@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "hello-world.labels" . | nindent 4 }}
     testing: app
+    testing: test
 data:
   api-endpoint: {{ .Values.appConfig.apiEndpoint | quote }}
   api-timeout: {{ .Values.appConfig.apiTimeout | quote }}
